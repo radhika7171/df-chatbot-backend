@@ -7,7 +7,6 @@ const projectId = "arty-bot-dev";
 const location = "us-central1";
 const agentId = "a9ef8e65-f0b1-4d1c-8163-975328ee8e80";
 const languageCode = "en";
-// const query = "loan a book";
 // Imports the Google Cloud Some API library
 const { SessionsClient } = require("@google-cloud/dialogflow-cx");
 
@@ -16,7 +15,6 @@ const client = new SessionsClient({
   apiEndpoint: "us-central1-dialogflow.googleapis.com",
   // keyFilename: "./arty-bot-dev-29c4e1e9a1c3.json",
 });
-
 function intelAPIdata(req, res) {
   axios
     .get("http://forms.intellcreative.ca/api-demo/v1/users/a435B9382sCs")
@@ -29,14 +27,7 @@ function intelAPIdata(req, res) {
       const sessionId = JSON.stringify(req.query.sessionId);
 
       console.log("session id==>", sessionId);
-      // if (/\d/.test(queryText)) {
-      //   queryText = 4;
-      // }
-      // console.log("🚀 ~ file: get.js ~ line 29 ~ queryText", queryText);
-      // console.log("🚀 ~ file: get.js ~ line 29 ~ queryText", typeof queryText);
 
-      // const sessionId = "dfMessenger-9777522";
-      // const sessionId = Math.random().toString(36).substring(7);
       const sessionPath = client.projectLocationAgentSessionPath(
         projectId,
         location,
@@ -54,7 +45,6 @@ function intelAPIdata(req, res) {
         queryInput: {
           text: {
             text: queryText,
-            // text: query,
           },
           languageCode,
         },
