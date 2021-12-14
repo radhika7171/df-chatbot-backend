@@ -59,15 +59,13 @@ function intelAPIdata(req, res) {
           languageCode,
         },
       };
-      // console.log("reqQuery==>", req);
-      // console.log("query==>", queryText);
 
       client
         .detectIntent(request)
         .then((response) => {
           console.log("requset==>", request);
           console.log("DFResponse==>", response);
-          console.log("requesttext==>", request.queryInput.text.text);
+          console.log("requestText==>", request.queryInput.text.text);
           console.log(
             "typerequesttext==>",
             typeof request.queryInput.text.text
