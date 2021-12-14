@@ -17,8 +17,6 @@ const client = new SessionsClient({
   // keyFilename: "./arty-bot-dev-29c4e1e9a1c3.json",
 });
 
-this.sessionId = Math.random().toString(36).substring(7);
-
 function intelAPIdata(req, res) {
   axios
     .get("http://forms.intellcreative.ca/api-demo/v1/users/a435B9382sCs")
@@ -29,6 +27,8 @@ function intelAPIdata(req, res) {
       const userLastName = value.encode(user_lastName);
       let queryText = JSON.stringify(req.query.message);
       const sessionId = JSON.stringify(req.query.sessionId);
+
+      console.log("session id==>", sessionId);
       // if (/\d/.test(queryText)) {
       //   queryText = 4;
       // }
