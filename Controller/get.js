@@ -71,18 +71,18 @@ function intelAPIdata(req, res) {
           //   JSON.stringify(response[0].queryResult.parameters.fields)
           // );
           res.send(response);
-          for (const message of response[0].queryResult.responseMessages) {
-            if (message.text) {
-              console.log(`Agent Response: ${message.text.text}`);
+          for (const message of response[0]?.queryResult?.responseMessages) {
+            if (message?.text) {
+              console.log(`Agent Response: ${message?.text?.text}`);
             }
           }
-          if (response[0].queryResult.match.intent) {
+          if (response[0]?.queryResult?.match?.intent) {
             console.log(
-              `Matched Intent: ${response[0].queryResult.match.intent.displayName}`
+              `Matched Intent: ${response[0]?.queryResult?.match?.intent?.displayName}`
             );
           }
           console.log(
-            `Current Page: ${response[0].queryResult.currentPage.displayName}`
+            `Current Page: ${response[0]?.queryResult?.currentPage?.displayName}`
           );
         })
         .catch((error) => {
