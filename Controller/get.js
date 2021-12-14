@@ -17,6 +17,8 @@ const client = new SessionsClient({
   // keyFilename: "./arty-bot-dev-29c4e1e9a1c3.json",
 });
 
+this.sessionId = Math.random().toString(36).substring(7);
+
 function intelAPIdata(req, res) {
   axios
     .get("http://forms.intellcreative.ca/api-demo/v1/users/a435B9382sCs")
@@ -25,9 +27,15 @@ function intelAPIdata(req, res) {
       const user_lastName = response.data.user.last_name;
       const userFirstName = value.encode(user_firstName);
       const userLastName = value.encode(user_lastName);
-      const queryText = JSON.stringify(req.query);
+      let queryText = JSON.stringify(req.query.message);
+      const sessionId = JSON.stringify(req.query.sessionId);
+      // if (/\d/.test(queryText)) {
+      //   queryText = 4;
+      // }
+      // console.log("🚀 ~ file: get.js ~ line 29 ~ queryText", queryText);
+      // console.log("🚀 ~ file: get.js ~ line 29 ~ queryText", typeof queryText);
 
-      const sessionId = "dfMessenger-9777522";
+      // const sessionId = "dfMessenger-9777522";
       // const sessionId = Math.random().toString(36).substring(7);
       const sessionPath = client.projectLocationAgentSessionPath(
         projectId,
@@ -51,13 +59,24 @@ function intelAPIdata(req, res) {
           languageCode,
         },
       };
-      console.log("query==>", queryText);
-      // console.log("query==>", query);
+      // console.log("reqQuery==>", req);
+      // console.log("query==>", queryText);
 
       client
         .detectIntent(request)
         .then((response) => {
           console.log("requset==>", request);
+          console.log("DFResponse==>", response);
+          console.log("requesttext==>", request.queryInput.text.text);
+          console.log(
+            "typerequesttext==>",
+            typeof request.queryInput.text.text
+          );
+
+          // console.log(
+          //   "text type==>",
+          //   typeof response[0]?.queryResult.responseMessages[0].text.text[0]
+          // );
           // console.log("response==>", response);
           // console.log(
           //   "response ==>",
