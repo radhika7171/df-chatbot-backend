@@ -16,6 +16,21 @@ const client = new SessionsClient({
   // keyFilename: "./arty-bot-dev-29c4e1e9a1c3.json",
 });
 function intelAPIdata(req, res) {
+  let queryText, sessionId;
+  let params = [];
+
+  if (req.query.message === undefined)
+    return res.send("Message cannot be empty");
+  else {
+    queryText = JSON.stringify(req.query.message);
+  }
+
+  if (req.query.sessionId === undefined)
+    return res.send("Session ID cannot be empty");
+  else {
+    sessionId = JSON.stringify(req.query.sessionId);
+  }
+
   axios
     .get("http://forms.intellcreative.ca/api-demo/v1/users/a435B9382sCs")
     .then(function (response) {
@@ -23,10 +38,9 @@ function intelAPIdata(req, res) {
       const user_lastName = response.data.user.last_name;
       const userFirstName = value.encode(user_firstName);
       const userLastName = value.encode(user_lastName);
-      let queryText = JSON.stringify(req.query.message);
-      const sessionId = JSON.stringify(req.query.sessionId);
 
-      console.log("session id==>", sessionId);
+      // console.log("message recieved from React query =>", req.query);
+      // console.log("data fetched from session Api=>", response.data.user);
 
       const sessionPath = client.projectLocationAgentSessionPath(
         projectId,
@@ -53,22 +67,15 @@ function intelAPIdata(req, res) {
       client
         .detectIntent(request)
         .then((response) => {
-          console.log("requset==>", request);
-          console.log("DFResponse==>", response);
-          console.log("requestText==>", request.queryInput.text.text);
-          console.log(
-            "typerequesttext==>",
-            typeof request.queryInput.text.text
-          );
+          // console.log("response", response);
 
           // console.log(
-          //   "text type==>",
-          //   typeof response[0]?.queryResult.responseMessages[0].text.text[0]
+          //   "session Api vatriables send to DF==>",
+          //   request.queryParams.parameters.fields
           // );
-          // console.log("response==>", response);
           // console.log(
-          //   "response ==>",
-          //   JSON.stringify(response[0].queryResult.parameters.fields)
+          //   "message text send to DF==>",
+          //   request.queryInput.text.text
           // );
           res.send(response);
           for (const message of response[0]?.queryResult?.responseMessages) {
@@ -84,6 +91,26 @@ function intelAPIdata(req, res) {
           console.log(
             `Current Page: ${response[0]?.queryResult?.currentPage?.displayName}`
           );
+          //send to axios post to session API
+          console.log(
+            "resonse parameters from DF",
+            response[0].queryResult.parameters.fields
+          );
+          params = response[0]?.queryResult?.parameters?.fields;
+          console.log("paramsList==>", params);
+          axios
+            .post(
+              "http://forms.intellcreative.ca/api-demo/v1/users/a435B9382sCs",
+              {
+                params,
+              }
+            )
+            .then(function (response) {
+              console.log("post response==>", response);
+            })
+            .catch(function (error) {
+              console.log("psot req error", error);
+            });
         })
         .catch((error) => {
           console.log("some error occurred => ", error);
@@ -94,7 +121,7 @@ function intelAPIdata(req, res) {
 // check port
 
 function checkPort(req, res) {
-  console.log("test");
+  console.log("Port listening");
   res?.send("Port listening");
 }
 
